@@ -331,8 +331,10 @@ public class ViewPart1 extends ViewPart {
 		makeActions();
 		contributeToActionBars();
 	}
-
-	// events 
+//-------------------------------------------------------------------------------------------------
+//		EVENTS
+//-------------------------------------------------------------------------------------------------	
+	
 	public void action_rbtn(String rbtn) {
 		switch(rbtn) {
 			case "rdbtn_Signed"  : sign=true;  break;
@@ -369,14 +371,20 @@ public class ViewPart1 extends ViewPart {
 		}
 		if(str.charAt(0)=='-' && str.length()==1) {return;}
 		long tst= Long.parseLong(str, 10);
+		txt_dec.setForeground(Color.BLACK);
+		enable_all();
 		if(!test_range(tst)) {
+			disable_all();
+			txt_dec.setEnabled(true);
+			txt_dec.requestFocus();
+			txt_dec.setForeground(DARKGREEN);
 			lbl_info.setForeground(DARKGREEN);
 			lbl_info.setText("Out of Range");
 			return;
 		}
-		int i = Integer.parseInt(str);
-		String bin = Integer.toBinaryString(i);
-		String hex=Integer.toHexString(i);
+		long i = Long.parseLong(str);
+		String bin = Long.toBinaryString(i);
+		String hex=Long.toHexString(i);
 		if(i<0) {
 			if(size==8) {
 				hex=hex.substring(6, hex.length());
@@ -399,8 +407,12 @@ public class ViewPart1 extends ViewPart {
 		if(isnum_hex()==false) {return;}
 		lbl_info.setText("");
     	int sl=str.length();
+    	enable_all();
 		if((sl>8)||(size==8 && sl>2)||(size==16 && sl>4)||(size==32 && sl>8)) {
-			txt_hex.setForeground(Color.red);
+			disable_all();
+			txt_hex.setEnabled(true);
+			txt_hex.requestFocus();
+			txt_hex.setForeground(DARKGREEN);
 			lbl_info.setForeground(DARKGREEN);
 			lbl_info.setText("Out of Range");
 			return;
@@ -425,8 +437,12 @@ public class ViewPart1 extends ViewPart {
 		if(isnum_bin()==false) {return;}
 		lbl_info.setText("");
     	int sl=str.length();
-		if((sl>32)||(size==8 && sl>8)||(size==16 && sl>16)) {
-			txt_bin.setForeground(Color.red);
+		enable_all();
+    	if((sl>32)||(size==8 && sl>8)||(size==16 && sl>16)) {
+    		disable_all();
+    		txt_bin.setEnabled(true);
+    		txt_bin.requestFocus();
+			txt_bin.setForeground(DARKGREEN);
 			lbl_info.setForeground(DARKGREEN);
 			lbl_info.setText("Out of Range");
 			return;
@@ -526,6 +542,7 @@ public class ViewPart1 extends ViewPart {
 		}
 		return true;
 	}
+	
 	private void clear_all_txt() {
 		txt_bin.setText("");
 		txt_bin0.setText("");
@@ -534,8 +551,38 @@ public class ViewPart1 extends ViewPart {
 		txt_bin3.setText("");		
 		txt_dec.setText("");
 		txt_hex.setText("");
-
 	}
+	
+	private void disable_all() {
+		txt_bin.setEnabled(false);
+		txt_bin0.setEnabled(false);
+		txt_bin1.setEnabled(false);
+		txt_bin2.setEnabled(false);
+		txt_bin3.setEnabled(false);
+		txt_dec.setEnabled(false);
+		txt_hex.setEnabled(false);
+		rdbtn_8.setEnabled(false);
+		rdbtn_16.setEnabled(false);
+		rdbtn_32.setEnabled(false);
+		rdbtn_Signed.setEnabled(false);
+		rdbtn_Unsigned.setEnabled(false);
+	}
+	
+	private void enable_all() {
+		txt_bin.setEnabled(true);
+		txt_bin0.setEnabled(true);
+		txt_bin1.setEnabled(true);
+		txt_bin2.setEnabled(true);
+		txt_bin3.setEnabled(true);
+		txt_dec.setEnabled(true);
+		txt_hex.setEnabled(true);
+		rdbtn_8.setEnabled(true);
+		rdbtn_16.setEnabled(true);
+		rdbtn_32.setEnabled(true);
+		rdbtn_Signed.setEnabled(true);
+		rdbtn_Unsigned.setEnabled(true);
+	}
+	
 	
 
 //-------------TOOLBAR--------------------------------------------------------------------
