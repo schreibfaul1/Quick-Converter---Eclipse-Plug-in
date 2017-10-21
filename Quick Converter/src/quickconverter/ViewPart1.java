@@ -36,6 +36,7 @@ import java.awt.event.KeyEvent;
 
 public class ViewPart1 extends ViewPart {
 	
+	
 	// members
 	final int int8_max=127;
 	final int int8_min=-128;
