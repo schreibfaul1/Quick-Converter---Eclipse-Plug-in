@@ -6,3 +6,5 @@ Are you a C++ programmer? Are You use Eclipse? Then this is the ultimate helper 
 copy QuickConverter_xxx.jar in Your Eclipse plugin-folder and restart Eclipse
 
 ![Image](https://github.com/schreibfaul1/Quick-Converter---Eclipse-Plug-in/blob/master/Quick%20Converter.jpg)
+
+![Image](https://github.com/schreibfaul1/Quick-Converter---Eclipse-Plug-in/blob/master/ASCII-UTF8.jpg)
