@@ -1,4 +1,4 @@
-# Quick-Converter---Eclipse-Plug-in
+# Quick-Converter- Eclipse Plugin
 
 converts binary <-> hexadecimal <-> decimal
 
