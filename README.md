@@ -3,7 +3,8 @@
 converts binary <-> hexadecimal <-> decimal
 
 Are you a C++ programmer? Are You use Eclipse? Then this is the ultimate helper for you. In addition, you can display a ASCII table and a table of the most important Unicode characters. The integration into Eclipse is quite simple:  
-copy QuickConverter_xxx.jar in Your Eclipse plugin-folder and restart Eclipse, that's all.
+copy QuickConverter_xxx.jar in the Eclipse plugin-folder and restart Eclipse, that's all.
+This project was inspired by Mikroelektronika's Quick Converter https://download.mikroe.com/documents/compilers/mikroc/pic/help/quick_converter.htm
 
 ![Image](https://github.com/schreibfaul1/Quick-Converter-Eclipse-Plugin/blob/master/additional_info/QuickConverter.png)
 
