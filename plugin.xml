@@ -40,11 +40,6 @@
                icon="icons/QC_red_16x16.gif"
                id="id1"
                style="push">
-         
-
-               commandId="command1"
-               icon="icons/QC_red_16x16.gif"
-               style="push">
             <parameter
                   name="Quick_Converter.Parameter1"
                   value="show_QC">
@@ -61,5 +56,4 @@
             commandId="command1">
       </handler>
    </extension>
-
 </plugin>
