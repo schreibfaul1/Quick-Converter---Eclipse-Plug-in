@@ -6,7 +6,6 @@ import quickconverter.Unicode;
 
 import java.net.URL;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -19,6 +18,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -26,9 +26,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.internal.util.BundleUtility;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
+
 
 public class ViewPart1 extends ViewPart {
 
@@ -69,16 +69,16 @@ public class ViewPart1 extends ViewPart {
             0x2261, 0x00B1, 0x2265, 0x2264, 0x2320, 0x2321, 0x00F7, 0x2248, 
             0x00B0, 0x2219, 0x00B7, 0x221A, 0x207F, 0x00B2, 0x25A0, 0x00A0 
     };
-    
-	Action action_ASCII;
-	Action action_Uni;
-	@SuppressWarnings("deprecation")
-	ImageDescriptor Action_A_Icon = AbstractUIPlugin.imageDescriptorFromPlugin("QuickConverter", "/icons/ASCII_red_16x16.gif");
-	@SuppressWarnings("deprecation")
-	ImageDescriptor Action_U_Icon = AbstractUIPlugin.imageDescriptorFromPlugin("QuickConverter", "/icons/Uni_red_16x16.gif");
 
+    Action action_ASCII;
+    Action action_Uni;
 
-	
+    Bundle bundle= org.eclipse.core.runtime.Platform.getBundle("QuickConverter");
+    URL fullPathStringA = bundle.getEntry("icons/ASCII_red_16x16.gif");
+    ImageDescriptor Action_A_Icon= ImageDescriptor.createFromURL(fullPathStringA);
+    URL fullPathStringU = bundle.getEntry("icons/Uni_red_16x16.gif");
+    ImageDescriptor Action_U_Icon= ImageDescriptor.createFromURL(fullPathStringU);
+
     // members
     final int int8_max = 127;
     final int int8_min = -128;
@@ -105,7 +105,6 @@ public class ViewPart1 extends ViewPart {
 
     Font Mono12 = new Font(null, "DejaVu Sans Mono", 12, 0);
     Font Mono18 = new Font(null, "DejaVu Sans Mono", 18, 0);
-
 
     public void createPartControl(Composite parent) {
         parent.setLayout(null);
@@ -312,8 +311,8 @@ public class ViewPart1 extends ViewPart {
         txt_bin.addModifyListener(listener);
 
 //ACTIONS
-		makeActions();
-		contributeToActionBars();
+        makeActions();
+        contributeToActionBars();
 
 // set defaults
         rdbtn_unsigned.setSelection(true);
@@ -754,37 +753,37 @@ public class ViewPart1 extends ViewPart {
     }
     
 //-------------TOOLBAR--------------------------------------------------------------------
-	
+    
     private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		IToolBarManager manager = bars.getToolBarManager();
-		manager.add(action_ASCII);
-		manager.add(action_Uni);
-	}
+        IActionBars bars = getViewSite().getActionBars();
+        IToolBarManager manager = bars.getToolBarManager();
+        manager.add(action_ASCII);
+        manager.add(action_Uni);
+    }
      
     private void makeActions() {
-		action_ASCII = new Action() {
-			public void run() {
-				ASCII.show();
-			}
-		};
-		action_ASCII.setText("ASCII");
-		action_ASCII.setToolTipText("ASCII Code");
-		action_ASCII.setImageDescriptor(Action_A_Icon);
-		
-		action_Uni = new Action() {
-			public void run() {
-				Unicode.show();
-			}
-		};
-		action_Uni.setText("Uni");
-		action_Uni.setToolTipText("Uni Code");
-		action_Uni.setImageDescriptor(Action_U_Icon);
-	}
+        action_ASCII = new Action() {
+            public void run() {
+                ASCII.show();
+            }
+        };
+        action_ASCII.setText("ASCII");
+        action_ASCII.setToolTipText("ASCII Code");
+        action_ASCII.setImageDescriptor(Action_A_Icon);
+        
+        action_Uni = new Action() {
+            public void run() {
+                Unicode.show();
+            }
+        };
+        action_Uni.setText("Uni");
+        action_Uni.setToolTipText("Uni Code");
+        action_Uni.setImageDescriptor(Action_U_Icon);
+    }
 
 
 
     public void setFocus() {
-    	// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
     }
 } // END VIEWPART1
