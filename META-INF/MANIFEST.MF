@@ -3,9 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: QuickConverter
 Bundle-SymbolicName: QuickConverter;singleton:=true
 Bundle-Version: 2.0.1.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Activator: quickconverter.Activator
+Bundle-Vendor: Wolle
+Export-Package: quickconverter
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime;bundle-version="3.13.0";resolution:=optional
-Export-Package: quickconverter
-Bundle-Vendor: Wolle
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: QuickConverter
