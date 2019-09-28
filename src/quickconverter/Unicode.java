@@ -28,8 +28,8 @@ public class Unicode {
 	static int upper_margin = 20;
 	static int left_margin  = 20;
 	static int lbl1_width   = 25;
-	static int txt1_width   = 35;
-	static int txt2_width   = 36;
+	static int txt1_width   = 32;
+	static int txt2_width   = 34;
 	static int item_height  = 25;
 	static int row_width    = lbl1_width +1 + txt1_width +1 + txt2_width + 1; 
 	
