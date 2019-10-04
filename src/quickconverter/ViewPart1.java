@@ -14,12 +14,18 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import static org.eclipse.swt.events.SelectionListener.*;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.RowLayout;
@@ -27,6 +33,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Group;
@@ -118,38 +126,58 @@ public class ViewPart1 extends ViewPart {
 
 
     public void createPartControl(Composite parent) {
-    	MessageBox msg = new MessageBox(parent.getShell()); // for debugging
-    	// load fonts
-    	
-    	URL fileUrl = null;
-    	File file = null;
-    	boolean loadFont = false;
-    	try {
-    		fileUrl = FileLocator.toFileURL(fullPathStringDJVSM);
-    		file = new File(fileUrl.getPath());
-    		loadFont = Display.getCurrent().loadFont(file.toString());
-    		if(!loadFont) {
-    			msg.setMessage(fullPathStringDJVSM.getPath() +  " is not loaded");
-    			msg.open();
-    		}
-    		fileUrl = FileLocator.toFileURL(fullPathStringDJVS);
-    		file = new File(fileUrl.getPath());
-    		loadFont = Display.getCurrent().loadFont(file.toString());
-    		if(!loadFont) {
-    			msg.setMessage(fullPathStringDJVS.getPath() +  " is not loaded");
-    			msg.open();
-    		}
-    	}catch (IOException e){
-    		e.printStackTrace();
-    	}
-    	Font DjVSM18 = new Font(Display.getCurrent(), "DejaVu Sans Mono", 18, SWT.NONE);
-    	Font DjVSM12 = new Font(Display.getCurrent(), "DejaVu Sans Mono", 12, SWT.NONE);
-    	Font DjVS9   = new Font(Display.getCurrent(), "DejaVu Sans",  9, SWT.NONE);
-    	Font DjVS10  = new Font(Display.getCurrent(), "DejaVu Sans", 10, SWT.NONE);
+        MessageBox msg = new MessageBox(parent.getShell()); // for debugging
+        // load fonts
+         URL fileUrl = null;
+        File file = null;
+        boolean loadFont = false;
+        try {
+            fileUrl = FileLocator.toFileURL(fullPathStringDJVSM);
+            file = new File(fileUrl.getPath());
+            loadFont = Display.getCurrent().loadFont(file.toString());
+            if(!loadFont) {
+                msg.setMessage(fullPathStringDJVSM.getPath() +  " is not loaded");
+                msg.open();
+            }
+            fileUrl = FileLocator.toFileURL(fullPathStringDJVS);
+            file = new File(fileUrl.getPath());
+            loadFont = Display.getCurrent().loadFont(file.toString());
+            if(!loadFont) {
+                msg.setMessage(fullPathStringDJVS.getPath() +  " is not loaded");
+                msg.open();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        Font DjVSM20B = new Font(Display.getCurrent(), "DejaVu Sans Mono", 20, SWT.BOLD);
+        Font DjVSM12  = new Font(Display.getCurrent(), "DejaVu Sans Mono", 12, SWT.NONE);
+        Font DjVS9    = new Font(Display.getCurrent(), "DejaVu Sans",  9, SWT.NONE);
+        Font DjVS10   = new Font(Display.getCurrent(), "DejaVu Sans", 10, SWT.NONE);
         
-    	// create a layout for all components
+        final Clipboard cb = new Clipboard(Display.getCurrent());
+        
+        // create copy/paste menu
+        Menu menu_txt_dec = new Menu(parent.getShell(), SWT.POP_UP);
+        final MenuItem copyItem_txt_dec = new MenuItem(menu_txt_dec, SWT.PUSH);
+        copyItem_txt_dec.setText("Copy");
+        final MenuItem pasteItem_txt_dec = new MenuItem(menu_txt_dec, SWT.PUSH);
+        pasteItem_txt_dec.setText ("Paste");
+        
+        Menu menu_txt_hex = new Menu(parent.getShell(), SWT.POP_UP);
+        final MenuItem copyItem_txt_hex = new MenuItem(menu_txt_hex, SWT.PUSH);
+        copyItem_txt_hex.setText("Copy");
+        final MenuItem pasteItem_txt_hex = new MenuItem(menu_txt_hex, SWT.PUSH);
+        pasteItem_txt_hex.setText ("Paste");          
+        
+        Menu menu_txt_bin = new Menu(parent.getShell(), SWT.POP_UP);
+        final MenuItem copyItem_txt_bin = new MenuItem(menu_txt_bin, SWT.PUSH);
+        copyItem_txt_bin.setText("Copy");
+        final MenuItem pasteItem_txt_bin = new MenuItem(menu_txt_bin, SWT.PUSH);
+        pasteItem_txt_bin.setText ("Paste");  
+        
+        // create a layout for all components
         // begin is at position x, y
-        // space between is 10    	
+        // space between is 10        
         parent.setLayout(null);
         parent.setBackground(bg_parent);
         int comp_posx = 10;
@@ -205,14 +233,18 @@ public class ViewPart1 extends ViewPart {
         txt_dec = new StyledText(parent, SWT.BORDER | SWT.SINGLE | SWT.RIGHT);
         txt_dec.setBackground(white);
         txt_dec.setBounds(dec_posx, 26, dec_width, 26);
+        txt_dec.setTopMargin(2);
+        txt_dec.setBottomMargin(0);
         txt_dec.setFont(DjVSM12);
+        txt_dec.setMenu(menu_txt_dec);
         // ASCII
         Label lbl_ascii = new Label(parent, SWT.CENTER);
         lbl_ascii.setBounds(dec_posx, 55, dec_width, 15);
         lbl_ascii.setFont(DjVS10);
         lbl_ascii.setText("ASCII char");
         txt_ascii = new Text(parent, SWT.BORDER | SWT.CENTER);
-        txt_ascii.setFont(DjVSM18);
+        txt_ascii.setBackground(white);
+        txt_ascii.setFont(DjVSM20B);
         txt_ascii.setEditable(false);
         txt_ascii.setBounds(dec_posx + 35, 70, 40, 40);
 // HEXADECIMAL
@@ -225,15 +257,19 @@ public class ViewPart1 extends ViewPart {
         lbl_hex.setText("HEXADECIMAL");
         txt_hex = new StyledText(parent, SWT.BORDER | SWT.SINGLE | SWT.RIGHT);
         txt_hex.setBounds(hex_posx, hex_posy + 15, hex_width, 26);
+        txt_hex.setTopMargin(2);
+        txt_hex.setBottomMargin(0);
         txt_hex.setBackground(white);
         txt_hex.setFont(DjVSM12);
+        txt_hex.setMenu(menu_txt_hex);
         // UNIcode
         Label lbl_uni = new Label(parent, SWT.CENTER);
         lbl_uni.setBounds(hex_posx, 55, dec_width, 15);
         lbl_uni.setFont(DjVS10);
         lbl_uni.setText("UNICODE char");
         txt_uni = new Text(parent, SWT.BORDER | SWT.CENTER);
-        txt_uni.setFont(DjVSM18);
+        txt_uni.setBackground(white);
+        txt_uni.setFont(DjVSM20B);
         txt_uni.setEditable(false);
         txt_uni.setBounds(hex_posx + 35, 70, 40, 40);
 // BINARY        
@@ -244,10 +280,13 @@ public class ViewPart1 extends ViewPart {
         lbl_bin.setBounds(bin_posx, bin_posy, bin_width, 15);
         lbl_bin.setText(" BINARY");
         txt_bin = new StyledText(parent, SWT.BORDER | SWT.SINGLE | SWT.RIGHT);
-        txt_bin.setRightMargin(7);
         txt_bin.setBackground(white);
         txt_bin.setFont(DjVSM12);
+        txt_bin.setMenu(menu_txt_bin);
         txt_bin.setBounds(bin_posx, 26, bin_width, 26);
+        txt_bin.setRightMargin(7);
+        txt_bin.setTopMargin(2);
+        txt_bin.setBottomMargin(0);
         int binx_width = 79;
         int binx_posy = bin_posy + 44;
         Composite c = new Composite(parent, SWT.NONE);
@@ -374,6 +413,103 @@ public class ViewPart1 extends ViewPart {
             }
         };
         txt_bin.addModifyListener(listener);
+        
+        
+        copyItem_txt_dec.addSelectionListener(widgetSelectedAdapter(e -> {
+            String selection = txt_dec.getSelectionText();
+            if (selection.length() == 0) {
+                return;
+            }
+            Object[] data = new Object[] { selection };
+            Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+            cb.setContents(data, types);
+        }));
+        pasteItem_txt_dec.addSelectionListener(widgetSelectedAdapter(e -> {
+            String string = (String) (cb.getContents(TextTransfer.getInstance()));
+            if (string != null) {
+                txt_dec.insert(string);
+                txt_keyReleased("txt_dec"); // is the new value valid?
+            }
+        }));
+        menu_txt_dec.addMenuListener(MenuListener.menuShownAdapter(e -> {
+            // is copy valid?
+            String selection = txt_dec.getSelectionText();
+            copyItem_txt_dec.setEnabled(selection.length() > 0);
+            // is paste valid?
+            TransferData[] available = cb.getAvailableTypes();
+            boolean enabled = false;
+            for (int i = 0; i < available.length; i++) {
+                if (TextTransfer.getInstance().isSupportedType(available[i])) {
+                    enabled = true;
+                    break;
+                }
+            }
+            pasteItem_txt_dec.setEnabled(enabled);
+        }));
+        
+        copyItem_txt_hex.addSelectionListener(widgetSelectedAdapter(e -> {
+            String selection = txt_hex.getSelectionText();
+            if (selection.length() == 0) {
+                return;
+            }
+            Object[] data = new Object[] { selection };
+            Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+            cb.setContents(data, types);
+        }));
+        pasteItem_txt_hex.addSelectionListener(widgetSelectedAdapter(e -> {
+            String string = (String) (cb.getContents(TextTransfer.getInstance()));
+            if (string != null) {
+                txt_hex.insert(string);
+                txt_keyReleased("txt_hex"); // is the new value valid?
+            }
+        }));
+        menu_txt_hex.addMenuListener(MenuListener.menuShownAdapter(e -> {
+            // is copy valid?
+            String selection = txt_hex.getSelectionText();
+            copyItem_txt_hex.setEnabled(selection.length() > 0);
+            // is paste valid?
+            TransferData[] available = cb.getAvailableTypes();
+            boolean enabled = false;
+            for (int i = 0; i < available.length; i++) {
+                if (TextTransfer.getInstance().isSupportedType(available[i])) {
+                    enabled = true;
+                    break;
+                }
+            }
+            pasteItem_txt_hex.setEnabled(enabled);
+        }));
+        
+        copyItem_txt_bin.addSelectionListener(widgetSelectedAdapter(e -> {
+            String selection = txt_bin.getSelectionText();
+            if (selection.length() == 0) {
+                return;
+            }
+            Object[] data = new Object[] { selection };
+            Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+            cb.setContents(data, types);
+        }));
+        pasteItem_txt_bin.addSelectionListener(widgetSelectedAdapter(e -> {
+            String string = (String) (cb.getContents(TextTransfer.getInstance()));
+            if (string != null) {
+                txt_bin.insert(string);
+                txt_keyReleased("txt_bin"); // is the new value valid?
+            }
+        }));
+        menu_txt_bin.addMenuListener(MenuListener.menuShownAdapter(e -> {
+            // is copy valid?
+            String selection = txt_bin.getSelectionText();
+            copyItem_txt_bin.setEnabled(selection.length() > 0);
+            // is paste valid?
+            TransferData[] available = cb.getAvailableTypes();
+            boolean enabled = false;
+            for (int i = 0; i < available.length; i++) {
+                if (TextTransfer.getInstance().isSupportedType(available[i])) {
+                    enabled = true;
+                    break;
+                }
+            }
+            pasteItem_txt_bin.setEnabled(enabled);
+        }));
 
 //ACTIONS
         makeActions();
@@ -805,7 +941,7 @@ public class ViewPart1 extends ViewPart {
     void uniInfo(String val) {
         try {
             long j = Long.parseLong(val, 2);
-            if ((j >= 0x20 && j <= uint16_max) && !(j >= 127 && j <= 159) && (j <= 0x6FF)) {
+            if ((j >= 0x20 && j <= uint16_max) && !(j >= 127 && j <= 159)) {
                 sb.appendCodePoint((int) j);
                 txt_uni.setText(sb.toString());
                 sb.delete(0, sb.length());
