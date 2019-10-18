@@ -5,7 +5,17 @@ Bundle-SymbolicName: QuickConverter;singleton:=true
 Bundle-Version: 2.0.1.qualifier
 Bundle-Activator: quickconverter.Activator
 Bundle-Vendor: Wolle
-Export-Package: quickconverter
+Export-Package: quickconverter;
+  uses:="org.eclipse.jface.action,
+   org.eclipse.swt.graphics,
+   org.eclipse.swt.widgets,
+   org.eclipse.core.commands,
+   org.eclipse.ui.plugin,
+   org.osgi.framework,
+   org.eclipse.jface.resource,
+   javax.swing.border,
+   javax.swing,
+   org.eclipse.ui.part"
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime;bundle-version="3.13.0";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

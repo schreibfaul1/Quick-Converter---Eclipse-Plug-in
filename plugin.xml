@@ -10,7 +10,7 @@
       <view
             category="QuickConverter"
             class="quickconverter.ViewPart1"
-            icon="icons/QC_red_16x16.gif"
+            icon="icons/QC_red.png"
             id="QuickConverter.view1"
             name="Quick Converter"
             restorable="true">
@@ -36,10 +36,10 @@
          <toolbar
             id="tbid">
            <command
-               commandId="command1"
-               icon="icons/QC_red_16x16.gif"
-               id="id1"
-               style="push">
+                 commandId="command1"
+                 icon="icons/QC_red.png"
+                 id="id1"
+                 style="push">
             <parameter
                   name="Quick_Converter.Parameter1"
                   value="show_QC">
