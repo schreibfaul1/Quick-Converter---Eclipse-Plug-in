@@ -44,8 +44,8 @@ public class ASCII {
 	static String val2="";
 	static int upper_margin = 20;
 	static int left_margin  = 20;
-	static int lbl1_width   = 25;
-	static int txt1_width   = 32;
+	static int lbl1_width   = 26;
+	static int txt1_width   = 34;
 	static int item_height  = 25;
 	static int row_width    = lbl1_width +1 + txt1_width +1 ; 
 	

@@ -11,7 +11,9 @@ import java.net.URL;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+
 import org.eclipse.jface.resource.ImageDescriptor;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.Clipboard;
@@ -90,9 +92,9 @@ public class ViewPart1 extends ViewPart {
 
     // resources
     Bundle bundle= Activator.getDefault().getBundle();
-    URL fullPathStringA = bundle.getEntry("icons/ASCII_red_16x16.gif");
+    URL fullPathStringA = bundle.getEntry("icons/ASCII_red.png");
     ImageDescriptor Action_A_Icon= ImageDescriptor.createFromURL(fullPathStringA);
-    URL fullPathStringU = bundle.getEntry("icons/Uni_red_16x16.gif");
+    URL fullPathStringU = bundle.getEntry("icons/UNI_red.png");
     ImageDescriptor Action_U_Icon= ImageDescriptor.createFromURL(fullPathStringU);
     URL fullPathStringDJVSM = bundle.getEntry("fonts/DejaVuSansMono.ttf");
     URL fullPathStringDJVS  = bundle.getEntry("fonts/DejaVuSans.ttf");
@@ -122,10 +124,18 @@ public class ViewPart1 extends ViewPart {
     Color green = new Color(null, 10, 146, 0);
     Color black = new Color(null, 0, 0, 0);
     Color white = new Color(null, 255, 255, 255);
+    
+    Color cwf = null; // ColorWidgetForeground
 
 
 
     public void createPartControl(Composite parent) {
+    	
+    	
+    	
+    	
+
+    	//System.out.println(Display.getCurrent().getData().toString());
         MessageBox msg = new MessageBox(parent.getShell()); // for debugging
         // load fonts
          URL fileUrl = null;
@@ -237,6 +247,7 @@ public class ViewPart1 extends ViewPart {
         txt_dec.setBottomMargin(0);
         txt_dec.setFont(DjVSM12);
         txt_dec.setMenu(menu_txt_dec);
+
         // ASCII
         Label lbl_ascii = new Label(parent, SWT.CENTER);
         lbl_ascii.setBounds(dec_posx, 55, dec_width, 15);
@@ -602,6 +613,7 @@ public class ViewPart1 extends ViewPart {
 //--------------------------------------------------------------------------------------------------
 
     public int parse(int act) {
+    	if(cwf == null)	cwf = txt_dec.getForeground();
         String v = "";
         int l = 0;
         long num = 0;
@@ -612,11 +624,11 @@ public class ViewPart1 extends ViewPart {
             l = v.length();
             if (l == 0) {
                 txt_dec.setText("");
-                txt_dec.setForeground(black);
+                txt_dec.setForeground(cwf);
                 txt_hex.setText("");
-                txt_hex.setForeground(black);
+                txt_hex.setForeground(cwf);
                 txt_bin.setText("");
-                txt_bin.setForeground(black);
+                txt_bin.setForeground(cwf);
                 return 1; // ok, nothing to do
             }
             if (v.charAt(0) == '+')
@@ -625,7 +637,7 @@ public class ViewPart1 extends ViewPart {
             txt_dec.setText(v);
             txt_dec.setSelection(l, l); // set cursor right
             if ((v.charAt(0) == '-') && (v.length() == 1)) {
-                txt_dec.setForeground(black);
+                txt_dec.setForeground(cwf);
                 return 1; // ok, nothing to do
             }
             if (!isDecimal(txt_dec.getText())) {
@@ -637,9 +649,9 @@ public class ViewPart1 extends ViewPart {
                 txt_dec.setForeground(green);
                 return -1; // out of range
             }
-            txt_dec.setForeground(black);
-            txt_hex.setForeground(black);
-            txt_bin.setForeground(black);
+            txt_dec.setForeground(cwf);
+            txt_hex.setForeground(cwf);
+            txt_bin.setForeground(cwf);
             num = complement_on_two(Long.parseLong(v, 10));
             System.out.printf("num = %d\n", num);
             String bin = Long.toBinaryString(num);
@@ -669,11 +681,11 @@ public class ViewPart1 extends ViewPart {
             l = v.length();
             if (l == 0) {
                 txt_dec.setText("");
-                txt_dec.setForeground(black);
+                txt_dec.setForeground(cwf);
                 txt_hex.setText("");
-                txt_hex.setForeground(black);
+                txt_hex.setForeground(cwf);
                 txt_bin.setText("");
-                txt_bin.setForeground(black);
+                txt_bin.setForeground(cwf);
                 return 1; // ok, nothing to do
             }
             v = v.toUpperCase();
@@ -692,9 +704,9 @@ public class ViewPart1 extends ViewPart {
                 txt_hex.setForeground(green);
                 return -1; // out of range
             }
-            txt_dec.setForeground(black);
-            txt_hex.setForeground(black);
-            txt_bin.setForeground(black);
+            txt_dec.setForeground(cwf);
+            txt_hex.setForeground(cwf);
+            txt_bin.setForeground(cwf);
             txt_dec.setText(Long.toString(num));
             String bin = Long.toBinaryString(num);
             txt_bin.setText(bin);
@@ -718,11 +730,11 @@ public class ViewPart1 extends ViewPart {
             l = v.length();
             if (l == 0) {
                 txt_dec.setText("");
-                txt_dec.setForeground(black);
+                txt_dec.setForeground(cwf);
                 txt_hex.setText("");
-                txt_hex.setForeground(black);
+                txt_hex.setForeground(cwf);
                 txt_bin.setText("");
-                txt_bin.setForeground(black);
+                txt_bin.setForeground(cwf);
                 return 1; // ok, nothing to do
             }
             if (!isBinary(v)) {
@@ -738,9 +750,9 @@ public class ViewPart1 extends ViewPart {
                 txt_hex.setForeground(green);
                 return -1; // out of range
             }
-            txt_dec.setForeground(black);
-            txt_hex.setForeground(black);
-            txt_bin.setForeground(black);
+            txt_dec.setForeground(cwf);
+            txt_hex.setForeground(cwf);
+            txt_bin.setForeground(cwf);
             txt_dec.setText(Long.toString(num));
             String hex = Long.toHexString(num);
             txt_hex.setText(hex.toUpperCase());
